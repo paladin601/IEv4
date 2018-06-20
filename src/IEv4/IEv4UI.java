@@ -5,12 +5,21 @@
  */
 package IEv4;
 
+import org.bytedeco.javacpp.opencv_core.Mat;
+import org.bytedeco.javacv.FFmpegFrameGrabber;
+
 /**
  *
  * @author Leonardo
  */
 public class IEv4UI extends javax.swing.JFrame {
 
+    public static int _gridX, _gridY, _gridWidth, _gridHeight, _numFrames, _growthBD, _gridHalfWidth, _gridHalfHeight;
+    public static float _aspectRatio, _minTolerance;
+    public static FFmpegFrameGrabber _grabber;
+    public static boolean _euclidianComp, _framesHD;
+    public static Mat _mosaic, _frame;
+    
     /**
      * Creates new form IEv4UI
      */
