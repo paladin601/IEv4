@@ -26,13 +26,13 @@ import static org.bytedeco.javacpp.opencv_imgproc.resize;
  * @author Leonardo
  */
 public class IEv4UI extends javax.swing.JFrame {
-    public static int _gridX, _gridY, _gridWidth, _gridHeight, _numFrames, _growthBD, _gridHalfWidth, _gridHalfHeight, _ExWidth, _ExHeigth, _numFramesSel;
+    public static int _gridX, _gridY, _gridWidth, _gridHeight, _numFrames, _numFramesSearch, _growthBD, _gridHalfWidth, _gridHalfHeight, _ExWidth, _ExHeigth, _numFramesSel;
     public static float _minTolerance, _minLocalTolerance;
     public static double _aspectRatio;
     public static FFmpegFrameGrabber _grabber;
     public static boolean _euclidianComp, _framesHD;
     public static Mat _mosaic, _frame;
-    public static Frame _frameSelect;
+    public static Frame _frameSelect,_frameSelectSearch;
 
     /**
     
@@ -230,19 +230,40 @@ public class IEv4UI extends javax.swing.JFrame {
         BDExplorer.setValue(0);
         BDExplorer.setEnabled(false);
         BDExplorer.setOpaque(false);
+        BDExplorer.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                BDExplorerMouseReleased(evt);
+            }
+        });
 
         Pixel.setForeground(new java.awt.Color(255, 255, 255));
         Pixel.setText("Pixel");
         Pixel.setEnabled(false);
         Pixel.setOpaque(false);
+        Pixel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PixelActionPerformed(evt);
+            }
+        });
 
         HD.setForeground(new java.awt.Color(255, 255, 255));
         HD.setText("Image HD");
         HD.setEnabled(false);
         HD.setOpaque(false);
+        HD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                HDActionPerformed(evt);
+            }
+        });
 
         ViewPhoto.setText("View Photo-Mosaic");
         ViewPhoto.setEnabled(false);
+        ViewPhoto.setOpaque(false);
+        ViewPhoto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ViewPhotoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout explorerBDLayout = new javax.swing.GroupLayout(explorerBD);
         explorerBD.setLayout(explorerBDLayout);
@@ -315,6 +336,11 @@ public class IEv4UI extends javax.swing.JFrame {
         ShowPhotoMosaic.setEnabled(false);
         ShowPhotoMosaic.setFocusable(false);
         ShowPhotoMosaic.setOpaque(false);
+        ShowPhotoMosaic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ShowPhotoMosaicActionPerformed(evt);
+            }
+        });
 
         EuclideanDistance.setForeground(new java.awt.Color(255, 255, 255));
         EuclideanDistance.setText("Euclidean Distance");
@@ -395,10 +421,17 @@ public class IEv4UI extends javax.swing.JFrame {
         return a;
     }
     
+    //display imagen en la zona grande
     public static void display_frame(Frame a){
         ImagePrint.setIcon(new ImageIcon (Java2DFrameUtils.toBufferedImage(resize(Java2DFrameUtils.toMat(a),636) )));
     }
     
+    public static void display_mat(Mat a){
+        ImagePrint.setIcon(new ImageIcon (Java2DFrameUtils.toBufferedImage(resize(a,636) )));
+    }
+    
+    
+    //imagen chiquita vista previa
     public static void display_mat_select(Mat a){
         ImageSelect.setIcon(new ImageIcon (Java2DFrameUtils.toBufferedImage(resize(a,310) )));
     }
@@ -505,6 +538,83 @@ public class IEv4UI extends javax.swing.JFrame {
     private void EuclideanDistanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EuclideanDistanceActionPerformed
         _euclidianComp = EuclideanDistance.isSelected();
     }//GEN-LAST:event_EuclideanDistanceActionPerformed
+
+    private void PixelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PixelActionPerformed
+        if(Pixel.isSelected()){
+            if(_framesHD){
+                HD.setSelected(false);
+                _framesHD=false;   
+            }else{
+                BDExplorer.setMaximum(0);//cambiar cero por tamaño de la base de datos
+                BDExplorer.setEnabled(true);
+                ViewPhoto.setEnabled(true);
+            }
+        }else{
+            if(!_framesHD){
+                BDExplorer.setEnabled(false);
+                ViewPhoto.setEnabled(false);
+                display_mat(_mosaic); // en mosaic se guarda la imagen modificada
+            }
+        }
+    }//GEN-LAST:event_PixelActionPerformed
+
+    private void HDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HDActionPerformed
+        if(HD.isSelected()){
+            if(Pixel.isSelected()){
+                Pixel.setSelected(false);
+                _framesHD=true;
+            }else{
+                _framesHD=true;
+                BDExplorer.setMaximum(0);//cambiar cero por tamaño de la base de datos
+                BDExplorer.setEnabled(true);
+                ViewPhoto.setEnabled(true);   
+            }
+        }else{
+            if(!Pixel.isSelected()){
+                BDExplorer.setEnabled(false);
+                ViewPhoto.setEnabled(false);
+                display_mat(_mosaic); // en mosaic se guarda la imagen modificada
+            }
+        }
+    }//GEN-LAST:event_HDActionPerformed
+
+    private void ShowPhotoMosaicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ShowPhotoMosaicActionPerformed
+        Pixel.setEnabled(true);
+        HD.setEnabled(true);
+        // generar bd
+        // generar mosaico y guardarlo en _mosaic
+        display_mat(_mosaic);
+        ShowPhotoMosaic.setEnabled(false);
+    }//GEN-LAST:event_ShowPhotoMosaicActionPerformed
+
+    private void BDExplorerMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BDExplorerMouseReleased
+        int a;
+        a = BDExplorer.getValue();//posicion en la bd
+        if(_framesHD){
+            //obtener numero de frame
+            // algo asi ---> _numFramesSel=a;
+            _numFramesSearch=300; // cableado mientras se busca en la bd cambiar
+            try {
+                _grabber.setVideoFrameNumber(_numFramesSearch);
+                _frameSelectSearch=_grabber.grab();
+                display_frame(_frameSelectSearch);
+            } catch (FrameGrabber.Exception ex) {
+                Logger.getLogger(IEv4UI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else{
+            Mat aux = null;
+            //obtener imagen miniatura de la bd pixelada aux = imagen de la bd
+            display_mat(aux);
+        }
+    }//GEN-LAST:event_BDExplorerMouseReleased
+
+    private void ViewPhotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewPhotoActionPerformed
+        HD.setEnabled(false);
+        Pixel.setEnabled(false);
+        _framesHD=false;
+        display_mat(_mosaic);
+        ViewPhoto.setEnabled(false);
+    }//GEN-LAST:event_ViewPhotoActionPerformed
     
     /**
      * @param args the command line arguments
