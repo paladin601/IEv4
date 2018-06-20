@@ -20,7 +20,7 @@ import org.bytedeco.javacv.Java2DFrameUtils;
 public class DB {
 
  
-    public int MinTolerance = 15, MinLocalTolerance = 20;
+    public int MinTolerance = 20, MinLocalTolerance = 30;
     Imagensish[] FramesUsed, FramesUsedHD, TiledImage;
     public HashSet<Integer> CheckedIndex;
     public ArrayList<Integer> FramesToMatch;
@@ -93,13 +93,15 @@ public class DB {
             
             for (int ii = 0; ii < FramesToMatch.size(); ii++) {
                 int index = FramesToMatch.get(ii);
-                if(ImagensishParecidas(TiledImage[index], Comp)){
+                if(Imagensish.AlikeImgs(TiledImage[index], Comp)){
                     this.FramesToMatch.remove(ii);
                     this.FramesUsed[index] = Comp;
                     this.FramesUsedHD[index] = new Imagensish(grabbedHD, frame);
                     ii = FramesToMatch.size();
+                    System.out.println("encontrado match para "+ii);
                 }
             }
+            System.out.println("visto el frame "+frame);
         }
     }
 
@@ -128,20 +130,6 @@ public class DB {
         }
        vconcat(aux1, aux, aux1);
         return aux1;
-    }
-
-    public static boolean ImagensishParecidas(Imagensish A, Imagensish B){
-//        Consumer<float> C = 
-//        Color[] promA = A.getProm(), promB = B.getProm();
-//        if(_euclidianComp){
-//            if(EUDistance(promA[0], promB[0]) > MinTolerance) return false;
-//            for(int ii=1; ii < promA.length; ii++){
-//            if(EUDistance(promA[ii], promB[ii] > MinLocalDistance) return false;
-//
-//
-//            }
-//        }else {}//labdistance
-        return true;
     }
     
     static double  f(double t){
