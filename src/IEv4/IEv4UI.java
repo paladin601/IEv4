@@ -492,10 +492,13 @@ public class IEv4UI extends javax.swing.JFrame {
     }//GEN-LAST:event_WidthKeyReleased
 
     private void SelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SelectActionPerformed
-        _frame=Java2DFrameUtils.toMat(_frameSelect);
-        display_mat_select(_frame);
-        ShowPhotoMosaic.setEnabled(true);
-        EuclideanDistance.setEnabled(true);
+        try{
+            _frame=Java2DFrameUtils.toMat(_frameSelect);
+            display_mat_select(_frame);
+            ShowPhotoMosaic.setEnabled(true);
+            EuclideanDistance.setEnabled(true);   
+        }catch(Exception e){
+        }
     }//GEN-LAST:event_SelectActionPerformed
 
     private void EuclideanDistanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EuclideanDistanceActionPerformed
