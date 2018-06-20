@@ -271,9 +271,6 @@
                     <Property name="horizontalAlignment" type="int" value="0"/>
                     <Property name="text" type="java.lang.String" value="0"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="GridXActionPerformed"/>
-                  </Events>
                 </Component>
                 <Component class="javax.swing.JTextField" name="GridY">
                   <Properties>
@@ -378,9 +375,6 @@
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="opaque" type="boolean" value="false"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="HDActionPerformed"/>
-                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="ViewPhoto">
                   <Properties>
@@ -449,6 +443,9 @@
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="opaque" type="boolean" value="false"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SavePhotoMosaicActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="LoadVideo">
           <Properties>

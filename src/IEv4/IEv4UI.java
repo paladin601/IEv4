@@ -5,8 +5,16 @@
  */
 package IEv4;
 
+import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileSystemView;
 import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
+import org.bytedeco.javacv.Frame;
+import org.bytedeco.javacv.FrameGrabber;
 
 /**
  *
@@ -14,11 +22,12 @@ import org.bytedeco.javacv.FFmpegFrameGrabber;
  */
 public class IEv4UI extends javax.swing.JFrame {
 
-    public static int _gridX, _gridY, _gridWidth, _gridHeight, _numFrames, _growthBD, _gridHalfWidth, _gridHalfHeight;
+    public static int _gridX, _gridY, _gridWidth, _gridHeight, _numFramesSel ,_numFrames, _growthBD, _gridHalfWidth, _gridHalfHeight;
     public static float _aspectRatio, _minTolerance;
     public static FFmpegFrameGrabber _grabber;
     public static boolean _euclidianComp, _framesHD;
     public static Mat _mosaic, _frame;
+    public static Frame _frameSelect;
     
     /**
      * Creates new form IEv4UI
@@ -101,11 +110,6 @@ public class IEv4UI extends javax.swing.JFrame {
 
         GridX.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         GridX.setText("0");
-        GridX.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                GridXActionPerformed(evt);
-            }
-        });
 
         GridY.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         GridY.setText("0");
@@ -204,11 +208,6 @@ public class IEv4UI extends javax.swing.JFrame {
         HD.setText("Image HD");
         HD.setEnabled(false);
         HD.setOpaque(false);
-        HD.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                HDActionPerformed(evt);
-            }
-        });
 
         ViewPhoto.setText("View Photo-Mosaic");
         ViewPhoto.setEnabled(false);
@@ -267,6 +266,11 @@ public class IEv4UI extends javax.swing.JFrame {
         SavePhotoMosaic.setActionCommand("Sa");
         SavePhotoMosaic.setFocusable(false);
         SavePhotoMosaic.setOpaque(false);
+        SavePhotoMosaic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SavePhotoMosaicActionPerformed(evt);
+            }
+        });
 
         LoadVideo.setText("Load");
         LoadVideo.setFocusable(false);
@@ -342,17 +346,35 @@ public class IEv4UI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public static void display_frame(Frame a){
+        
+    }
+    
     private void LoadVideoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoadVideoActionPerformed
-        // TODO add your handling code here:
+        JFileChooser fChooser = new JFileChooser(FileSystemView.getFileSystemView().getDefaultDirectory());
+        fChooser.setFileFilter(new FileNameExtensionFilter("mp4", "mp4"));        
+        fChooser.setFileFilter(new FileNameExtensionFilter("mkv", "mkv"));
+        fChooser.setFileFilter(new FileNameExtensionFilter("avi", "avi"));
+        if (fChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            File fSelected = fChooser.getSelectedFile();
+            _grabber = new FFmpegFrameGrabber(fSelected.getAbsolutePath());
+            try {
+                _grabber.start();
+                _numFrames= _grabber.getLengthInVideoFrames()-1; 
+                _numFramesSel=_numFrames/2;
+                _grabber.setVideoFrameNumber(_numFramesSel);
+                _frameSelect=_grabber.grab();
+                display_frame(_frameSelect);
+            } catch (FrameGrabber.Exception ex) {
+                Logger.getLogger(IEv4UI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
     }//GEN-LAST:event_LoadVideoActionPerformed
 
-    private void GridXActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GridXActionPerformed
+    private void SavePhotoMosaicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SavePhotoMosaicActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_GridXActionPerformed
-
-    private void HDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HDActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_HDActionPerformed
+    }//GEN-LAST:event_SavePhotoMosaicActionPerformed
 
     /**
      * @param args the command line arguments
