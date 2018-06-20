@@ -389,17 +389,18 @@ public class IEv4UI extends javax.swing.JFrame {
         return (double) x/y;
     }
     
-    public static Mat resize (Mat a,int x, int y){
+    public static Mat resize (Mat a,int x){
+        int y=calculateHeight(x);
         org.bytedeco.javacpp.opencv_imgproc.resize(a, a, new Size(x,y) );
         return a;
     }
     
     public static void display_frame(Frame a){
-        ImagePrint.setIcon(new ImageIcon (Java2DFrameUtils.toBufferedImage(resize(Java2DFrameUtils.toMat(a),636,calculateHeight(636)) )));
+        ImagePrint.setIcon(new ImageIcon (Java2DFrameUtils.toBufferedImage(resize(Java2DFrameUtils.toMat(a),636) )));
     }
     
     public static void display_mat_select(Mat a){
-        ImageSelect.setIcon(new ImageIcon (Java2DFrameUtils.toBufferedImage(resize(a,310,calculateHeight(310)) )));
+        ImageSelect.setIcon(new ImageIcon (Java2DFrameUtils.toBufferedImage(resize(a,310) )));
     }
     
     private void LoadVideoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoadVideoActionPerformed
