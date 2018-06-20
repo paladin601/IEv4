@@ -13,11 +13,13 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import org.bytedeco.javacpp.opencv_core.Mat;
+import org.bytedeco.javacpp.opencv_core.Size;
 import org.bytedeco.javacpp.opencv_imgcodecs;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.FrameGrabber;
 import org.bytedeco.javacv.Java2DFrameUtils;
+import static org.bytedeco.javacpp.opencv_imgproc.resize;
 
 /**
  *
@@ -69,7 +71,6 @@ public class IEv4UI extends javax.swing.JFrame {
         HD = new javax.swing.JCheckBox();
         ViewPhoto = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jScrollPane3 = new javax.swing.JScrollPane();
         ImagePrint = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -77,7 +78,7 @@ public class IEv4UI extends javax.swing.JFrame {
         SavePhotoMosaic = new javax.swing.JButton();
         LoadVideo = new javax.swing.JButton();
         ShowPhotoMosaic = new javax.swing.JButton();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        EuclideanDistance = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -100,6 +101,11 @@ public class IEv4UI extends javax.swing.JFrame {
 
         Select.setText("Seleccionar");
         Select.setOpaque(false);
+        Select.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SelectActionPerformed(evt);
+            }
+        });
 
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Select Grid Image Out:");
@@ -143,11 +149,6 @@ public class IEv4UI extends javax.swing.JFrame {
         Height.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         Height.setText("0");
         Height.setEnabled(false);
-        Height.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                HeightActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout selectFrameLayout = new javax.swing.GroupLayout(selectFrame);
         selectFrame.setLayout(selectFrameLayout);
@@ -277,9 +278,7 @@ public class IEv4UI extends javax.swing.JFrame {
         containerOptions.addTab("Explore BD", null, explorerBD, "");
 
         ImagePrint.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jScrollPane3.setViewportView(ImagePrint);
-
-        jScrollPane1.setViewportView(jScrollPane3);
+        jScrollPane1.setViewportView(ImagePrint);
 
         jTabbedPane1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -315,10 +314,15 @@ public class IEv4UI extends javax.swing.JFrame {
         ShowPhotoMosaic.setFocusable(false);
         ShowPhotoMosaic.setOpaque(false);
 
-        jCheckBox1.setForeground(new java.awt.Color(255, 255, 255));
-        jCheckBox1.setText("Euclidean Distance");
-        jCheckBox1.setEnabled(false);
-        jCheckBox1.setOpaque(false);
+        EuclideanDistance.setForeground(new java.awt.Color(255, 255, 255));
+        EuclideanDistance.setText("Euclidean Distance");
+        EuclideanDistance.setEnabled(false);
+        EuclideanDistance.setOpaque(false);
+        EuclideanDistance.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EuclideanDistanceActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -335,7 +339,7 @@ public class IEv4UI extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(ShowPhotoMosaic)
                         .addGap(18, 18, 18)
-                        .addComponent(jCheckBox1)
+                        .addComponent(EuclideanDistance)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(LoadVideo)
                         .addGap(18, 18, 18)
@@ -352,7 +356,7 @@ public class IEv4UI extends javax.swing.JFrame {
                             .addComponent(ShowPhotoMosaic)
                             .addComponent(LoadVideo)
                             .addComponent(SavePhotoMosaic)
-                            .addComponent(jCheckBox1))
+                            .addComponent(EuclideanDistance))
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addComponent(containerOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(26, 26, 26)
@@ -375,8 +379,17 @@ public class IEv4UI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public static Mat resize (Mat a,int x, int y){
+        org.bytedeco.javacpp.opencv_imgproc.resize(a, a, new Size(x,y) );
+        return a;
+    }
+    
     public static void display_frame(Frame a){
-        ImagePrint.setIcon(new ImageIcon (Java2DFrameUtils.toBufferedImage(a)) );
+        ImagePrint.setIcon(new ImageIcon (Java2DFrameUtils.toBufferedImage(resize(Java2DFrameUtils.toMat(a),639,400) )));
+    }
+    
+    public static void display_mat_select(Mat a){
+        ImageSelect.setIcon(new ImageIcon (Java2DFrameUtils.toBufferedImage(a)) );
     }
     
     private void LoadVideoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoadVideoActionPerformed
@@ -419,12 +432,17 @@ public class IEv4UI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_SavePhotoMosaicActionPerformed
 
-    private void HeightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HeightActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_HeightActionPerformed
-
     private void ExploreVideoMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExploreVideoMouseReleased
-        int a = ExploreVideo.getValue();
+        int a ;
+        try {
+            a= ExploreVideo.getValue();
+            _numFramesSel=a;
+            _grabber.setVideoFrameNumber(_numFramesSel);
+            _frameSelect=_grabber.grab();
+            display_frame(_frameSelect);
+        } catch (FrameGrabber.Exception ex) {
+            Logger.getLogger(IEv4UI.class.getName()).log(Level.SEVERE, null, ex);
+        } 
     }//GEN-LAST:event_ExploreVideoMouseReleased
 
     private void GridXKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_GridXKeyReleased
@@ -458,6 +476,17 @@ public class IEv4UI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_WidthKeyReleased
 
+    private void SelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SelectActionPerformed
+        _frame=Java2DFrameUtils.toMat(_frameSelect);
+        display_mat_select(_frame);
+        ShowPhotoMosaic.setEnabled(true);
+        EuclideanDistance.setEnabled(true);
+    }//GEN-LAST:event_SelectActionPerformed
+
+    private void EuclideanDistanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EuclideanDistanceActionPerformed
+        _euclidianComp = EuclideanDistance.isSelected();
+    }//GEN-LAST:event_EuclideanDistanceActionPerformed
+    
     /**
      * @param args the command line arguments
      */
@@ -493,13 +522,14 @@ public class IEv4UI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JSlider BDExplorer;
+    private javax.swing.JCheckBox EuclideanDistance;
     private javax.swing.JSlider ExploreVideo;
     private javax.swing.JTextField GridX;
     private javax.swing.JTextField GridY;
     private javax.swing.JCheckBox HD;
     private javax.swing.JTextField Height;
     private static javax.swing.JLabel ImagePrint;
-    private javax.swing.JLabel ImageSelect;
+    private static javax.swing.JLabel ImageSelect;
     private javax.swing.JButton LoadVideo;
     private javax.swing.JCheckBox Pixel;
     private javax.swing.JButton SavePhotoMosaic;
@@ -509,7 +539,6 @@ public class IEv4UI extends javax.swing.JFrame {
     private javax.swing.JTextField Width;
     private javax.swing.JTabbedPane containerOptions;
     private javax.swing.JPanel explorerBD;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -518,7 +547,6 @@ public class IEv4UI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JPanel selectFrame;
