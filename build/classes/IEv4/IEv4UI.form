@@ -48,11 +48,11 @@
                   <EmptySpace max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="containerOptions" max="32767" attributes="0"/>
-                      <Component id="jTabbedPane1" min="-2" pref="314" max="-2" attributes="0"/>
+                      <Component id="ContainerSelected" min="-2" pref="314" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                      <Component id="jScrollPane1" min="-2" pref="639" max="-2" attributes="0"/>
+                      <Component id="ContainerImage" min="-2" pref="639" max="-2" attributes="0"/>
                       <Group type="102" attributes="0">
                           <Component id="ShowPhotoMosaic" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -82,10 +82,10 @@
                           <Group type="102" alignment="1" attributes="0">
                               <Component id="containerOptions" min="-2" pref="233" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                              <Component id="jTabbedPane1" min="-2" pref="224" max="-2" attributes="0"/>
+                              <Component id="ContainerSelected" min="-2" pref="224" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <Component id="jScrollPane1" alignment="0" min="-2" pref="430" max="-2" attributes="0"/>
+                      <Component id="ContainerImage" alignment="0" min="-2" pref="430" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="22" max="32767" attributes="0"/>
               </Group>
@@ -402,7 +402,7 @@
             </Container>
           </SubComponents>
         </Container>
-        <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+        <Container class="javax.swing.JScrollPane" name="ContainerImage">
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
@@ -416,7 +416,7 @@
             </Component>
           </SubComponents>
         </Container>
-        <Container class="javax.swing.JTabbedPane" name="jTabbedPane1">
+        <Container class="javax.swing.JTabbedPane" name="ContainerSelected">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>

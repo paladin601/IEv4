@@ -28,7 +28,7 @@ import static org.bytedeco.javacpp.opencv_imgproc.resize;
 public class IEv4UI extends javax.swing.JFrame {
 
     public static int _gridX, _gridY, _gridWidth, _gridHeight, _numFramesSel ,_numFrames, _growthBD, _gridHalfWidth, _gridHalfHeight;
-    public static float _aspectRatio, _minTolerance;
+    public static double _aspectRatio, _minTolerance;
     public static FFmpegFrameGrabber _grabber;
     public static boolean _euclidianComp, _framesHD;
     public static Mat _mosaic, _frame;
@@ -70,9 +70,9 @@ public class IEv4UI extends javax.swing.JFrame {
         Pixel = new javax.swing.JCheckBox();
         HD = new javax.swing.JCheckBox();
         ViewPhoto = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        ContainerImage = new javax.swing.JScrollPane();
         ImagePrint = new javax.swing.JLabel();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        ContainerSelected = new javax.swing.JTabbedPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         ImageSelect = new javax.swing.JLabel();
         SavePhotoMosaic = new javax.swing.JButton();
@@ -278,9 +278,9 @@ public class IEv4UI extends javax.swing.JFrame {
         containerOptions.addTab("Explore BD", null, explorerBD, "");
 
         ImagePrint.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jScrollPane1.setViewportView(ImagePrint);
+        ContainerImage.setViewportView(ImagePrint);
 
-        jTabbedPane1.setBackground(new java.awt.Color(255, 255, 255));
+        ContainerSelected.setBackground(new java.awt.Color(255, 255, 255));
 
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
@@ -288,7 +288,7 @@ public class IEv4UI extends javax.swing.JFrame {
         ImageSelect.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jScrollPane2.setViewportView(ImageSelect);
 
-        jTabbedPane1.addTab("Image Selected", jScrollPane2);
+        ContainerSelected.addTab("Image Selected", jScrollPane2);
 
         SavePhotoMosaic.setText("Save");
         SavePhotoMosaic.setActionCommand("Sa");
@@ -332,10 +332,10 @@ public class IEv4UI extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(containerOptions)
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(ContainerSelected, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(31, 31, 31)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 639, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ContainerImage, javax.swing.GroupLayout.PREFERRED_SIZE, 639, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(ShowPhotoMosaic)
                         .addGap(18, 18, 18)
@@ -360,8 +360,8 @@ public class IEv4UI extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addComponent(containerOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(26, 26, 26)
-                            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(ContainerSelected, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(ContainerImage, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
@@ -379,17 +379,25 @@ public class IEv4UI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public static int calculateHeight(int x){
+        return  (int) (x/_aspectRatio);
+    }
+    
+    public static double calculateAspectRatio(int x, int y){
+        return (double) x/y;
+    }
+    
     public static Mat resize (Mat a,int x, int y){
         org.bytedeco.javacpp.opencv_imgproc.resize(a, a, new Size(x,y) );
         return a;
     }
     
     public static void display_frame(Frame a){
-        ImagePrint.setIcon(new ImageIcon (Java2DFrameUtils.toBufferedImage(resize(Java2DFrameUtils.toMat(a),639,400) )));
+        ImagePrint.setIcon(new ImageIcon (Java2DFrameUtils.toBufferedImage(resize(Java2DFrameUtils.toMat(a),636,calculateHeight(636)) )));
     }
     
     public static void display_mat_select(Mat a){
-        ImageSelect.setIcon(new ImageIcon (Java2DFrameUtils.toBufferedImage(a)) );
+        ImageSelect.setIcon(new ImageIcon (Java2DFrameUtils.toBufferedImage(resize(a,310,calculateHeight(310)) )));
     }
     
     private void LoadVideoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoadVideoActionPerformed
@@ -402,10 +410,15 @@ public class IEv4UI extends javax.swing.JFrame {
             _grabber = new FFmpegFrameGrabber(fSelected.getAbsolutePath());
             try {
                 _grabber.start();
-                _numFrames= _grabber.getLengthInVideoFrames()-1; 
-                _numFramesSel=_numFrames/2;
+                _numFrames = _grabber.getLengthInVideoFrames()-1; 
+                _numFramesSel =_numFrames/2;
                 _grabber.setVideoFrameNumber(_numFramesSel);
-                _frameSelect=_grabber.grab();
+                _frameSelect = _grabber.grab();
+                _gridWidth = _grabber.getImageWidth();
+                Width.setText(Integer.toString(_gridWidth));
+                _gridHeight = _grabber.getImageHeight();
+                Height.setText(Integer.toString(_gridHeight));
+                _aspectRatio = calculateAspectRatio(_gridWidth, _gridHeight);
                 ExploreVideo.setMaximum(_numFrames);
                 ExploreVideo.setValue(_numFramesSel);
                 display_frame(_frameSelect);
@@ -470,8 +483,8 @@ public class IEv4UI extends javax.swing.JFrame {
     private void WidthKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_WidthKeyReleased
         try{
             _gridWidth=Integer.parseInt(Width.getText());
-            _gridHeight=0;// falta aspect ratio
-            Height.setText("aspect ratio");
+            _gridHeight=calculateHeight(_gridWidth);
+            Height.setText(Integer.toString(_gridHeight));
         }catch(NumberFormatException e){
         }
     }//GEN-LAST:event_WidthKeyReleased
@@ -522,6 +535,8 @@ public class IEv4UI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JSlider BDExplorer;
+    private javax.swing.JScrollPane ContainerImage;
+    private javax.swing.JTabbedPane ContainerSelected;
     private javax.swing.JCheckBox EuclideanDistance;
     private javax.swing.JSlider ExploreVideo;
     private javax.swing.JTextField GridX;
@@ -545,10 +560,8 @@ public class IEv4UI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JPanel selectFrame;
     // End of variables declaration//GEN-END:variables
 }
