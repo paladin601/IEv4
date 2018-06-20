@@ -12,6 +12,7 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import org.bytedeco.javacpp.opencv_core.Mat;
+import org.bytedeco.javacpp.opencv_imgcodecs;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.FrameGrabber;
@@ -373,7 +374,19 @@ public class IEv4UI extends javax.swing.JFrame {
     }//GEN-LAST:event_LoadVideoActionPerformed
 
     private void SavePhotoMosaicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SavePhotoMosaicActionPerformed
-        // TODO add your handling code here:
+        JFileChooser fChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+        fChooser.setFileFilter(new FileNameExtensionFilter("bmp", "bmp"));        
+        fChooser.setFileFilter(new FileNameExtensionFilter("png", "png"));
+        fChooser.setFileFilter(new FileNameExtensionFilter("jpg", "jpg"));
+        if( fChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION){
+            File fSelected = fChooser.getSelectedFile();      
+            String name = fSelected.getAbsolutePath();
+            if(!name.endsWith(".jpg") || !name.endsWith(".bmp") || !name.endsWith(".png")){
+                name = name + "." + fChooser.getFileFilter().getDescription();
+            }
+            //Guardar imagen
+            opencv_imgcodecs.imwrite(name,_mosaic);
+        }
     }//GEN-LAST:event_SavePhotoMosaicActionPerformed
 
     /**
