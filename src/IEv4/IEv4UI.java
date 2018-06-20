@@ -8,6 +8,7 @@ package IEv4;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
@@ -16,6 +17,7 @@ import org.bytedeco.javacpp.opencv_imgcodecs;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.FrameGrabber;
+import org.bytedeco.javacv.Java2DFrameUtils;
 
 /**
  *
@@ -90,6 +92,11 @@ public class IEv4UI extends javax.swing.JFrame {
         ExploreVideo.setBackground(new java.awt.Color(48, 65, 82));
         ExploreVideo.setMaximum(200);
         ExploreVideo.setValue(100);
+        ExploreVideo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                ExploreVideoMouseReleased(evt);
+            }
+        });
 
         Select.setText("Seleccionar");
         Select.setOpaque(false);
@@ -110,16 +117,37 @@ public class IEv4UI extends javax.swing.JFrame {
         jLabel8.setText("Height :");
 
         GridX.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        GridX.setText("0");
+        GridX.setText("1");
+        GridX.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                GridXKeyReleased(evt);
+            }
+        });
 
         GridY.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        GridY.setText("0");
+        GridY.setText("1");
+        GridY.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                GridYKeyReleased(evt);
+            }
+        });
 
         Width.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         Width.setText("0");
+        Width.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                WidthKeyReleased(evt);
+            }
+        });
 
         Height.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         Height.setText("0");
+        Height.setEnabled(false);
+        Height.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                HeightActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout selectFrameLayout = new javax.swing.GroupLayout(selectFrame);
         selectFrame.setLayout(selectFrameLayout);
@@ -348,7 +376,7 @@ public class IEv4UI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     public static void display_frame(Frame a){
-        
+        ImagePrint.setIcon(new ImageIcon (Java2DFrameUtils.toBufferedImage(a)) );
     }
     
     private void LoadVideoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoadVideoActionPerformed
@@ -365,6 +393,8 @@ public class IEv4UI extends javax.swing.JFrame {
                 _numFramesSel=_numFrames/2;
                 _grabber.setVideoFrameNumber(_numFramesSel);
                 _frameSelect=_grabber.grab();
+                ExploreVideo.setMaximum(_numFrames);
+                ExploreVideo.setValue(_numFramesSel);
                 display_frame(_frameSelect);
             } catch (FrameGrabber.Exception ex) {
                 Logger.getLogger(IEv4UI.class.getName()).log(Level.SEVERE, null, ex);
@@ -388,6 +418,45 @@ public class IEv4UI extends javax.swing.JFrame {
             opencv_imgcodecs.imwrite(name,_mosaic);
         }
     }//GEN-LAST:event_SavePhotoMosaicActionPerformed
+
+    private void HeightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HeightActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_HeightActionPerformed
+
+    private void ExploreVideoMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExploreVideoMouseReleased
+        int a = ExploreVideo.getValue();
+    }//GEN-LAST:event_ExploreVideoMouseReleased
+
+    private void GridXKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_GridXKeyReleased
+       String a;
+       try{
+            a=GridX.getText();
+            _gridX=Integer.parseInt(a);
+            _gridY=_gridX;
+            GridY.setText(a);
+       }catch(NumberFormatException e){
+       }
+    }//GEN-LAST:event_GridXKeyReleased
+
+    private void GridYKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_GridYKeyReleased
+        String a;
+        try{
+             a=GridY.getText();
+             _gridY=Integer.parseInt(a);
+             _gridX=_gridY;
+             GridX.setText(a);
+        }catch(NumberFormatException e){     
+        }
+    }//GEN-LAST:event_GridYKeyReleased
+
+    private void WidthKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_WidthKeyReleased
+        try{
+            _gridWidth=Integer.parseInt(Width.getText());
+            _gridHeight=0;// falta aspect ratio
+            Height.setText("aspect ratio");
+        }catch(NumberFormatException e){
+        }
+    }//GEN-LAST:event_WidthKeyReleased
 
     /**
      * @param args the command line arguments
@@ -429,7 +498,7 @@ public class IEv4UI extends javax.swing.JFrame {
     private javax.swing.JTextField GridY;
     private javax.swing.JCheckBox HD;
     private javax.swing.JTextField Height;
-    private javax.swing.JLabel ImagePrint;
+    private static javax.swing.JLabel ImagePrint;
     private javax.swing.JLabel ImageSelect;
     private javax.swing.JButton LoadVideo;
     private javax.swing.JCheckBox Pixel;
