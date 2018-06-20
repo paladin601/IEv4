@@ -31,23 +31,32 @@ public class IEv4UI extends javax.swing.JFrame {
         containerOptions = new javax.swing.JTabbedPane();
         selectFrame = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
-        jSlider1 = new javax.swing.JSlider();
-        jLabel1 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
-        jLabel2 = new javax.swing.JLabel();
-        jSpinner2 = new javax.swing.JSpinner();
-        jLabel3 = new javax.swing.JLabel();
-        jSpinner3 = new javax.swing.JSpinner();
-        jButton1 = new javax.swing.JButton();
+        ExploreVideo = new javax.swing.JSlider();
+        Select = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        GridX = new javax.swing.JTextField();
+        GridY = new javax.swing.JTextField();
+        Width = new javax.swing.JTextField();
+        Height = new javax.swing.JTextField();
         explorerBD = new javax.swing.JPanel();
+        BDExplorer = new javax.swing.JSlider();
+        Pixel = new javax.swing.JCheckBox();
+        HD = new javax.swing.JCheckBox();
+        ViewPhoto = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        canvas2 = new java.awt.Canvas();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        ImagePrint = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        canvas1 = new java.awt.Canvas();
-        Close = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        ImageSelect = new javax.swing.JLabel();
         SavePhotoMosaic = new javax.swing.JButton();
         LoadVideo = new javax.swing.JButton();
         ShowPhotoMosaic = new javax.swing.JButton();
+        jCheckBox1 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -59,118 +68,198 @@ public class IEv4UI extends javax.swing.JFrame {
         selectFrame.setBackground(new java.awt.Color(48, 65, 82));
         selectFrame.setFocusable(false);
 
-        jSlider1.setBackground(new java.awt.Color(48, 65, 82));
-        jSlider1.setMaximum(200);
-        jSlider1.setValue(100);
+        ExploreVideo.setBackground(new java.awt.Color(48, 65, 82));
+        ExploreVideo.setMaximum(200);
+        ExploreVideo.setValue(100);
 
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Hora");
-        jLabel1.setFocusable(false);
+        Select.setText("Seleccionar");
+        Select.setOpaque(false);
 
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Minuto");
-        jLabel2.setFocusable(false);
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Select Grid Image Out:");
 
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("Segundo");
-        jLabel3.setFocusable(false);
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("Grid X :");
 
-        jButton1.setText("Seleccionar");
-        jButton1.setOpaque(false);
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("Grid Y :");
+
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("Width :");
+
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setText("Height :");
+
+        GridX.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        GridX.setText("0");
+        GridX.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GridXActionPerformed(evt);
+            }
+        });
+
+        GridY.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        GridY.setText("0");
+
+        Width.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        Width.setText("0");
+
+        Height.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        Height.setText("0");
 
         javax.swing.GroupLayout selectFrameLayout = new javax.swing.GroupLayout(selectFrame);
         selectFrame.setLayout(selectFrameLayout);
         selectFrameLayout.setHorizontalGroup(
             selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(selectFrameLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator1)
-                    .addComponent(jSlider1, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE)
                     .addGroup(selectFrameLayout.createSequentialGroup()
-                        .addGap(47, 47, 47)
-                        .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jSpinner1, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
-                        .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jSpinner2, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
-                        .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jSpinner3, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(selectFrameLayout.createSequentialGroup()
+                                .addGap(105, 105, 105)
+                                .addComponent(Select))
+                            .addGroup(selectFrameLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel4)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(selectFrameLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ExploreVideo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jSeparator1)
+                            .addGroup(selectFrameLayout.createSequentialGroup()
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(Height, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(selectFrameLayout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(Width, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, selectFrameLayout.createSequentialGroup()
+                                .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel5))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(GridX, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(GridY, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap())
-            .addGroup(selectFrameLayout.createSequentialGroup()
-                .addGap(108, 108, 108)
-                .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         selectFrameLayout.setVerticalGroup(
             selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(selectFrameLayout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(GridX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addComponent(GridY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addComponent(Width, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(selectFrameLayout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ExploreVideo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Select))
+                    .addGroup(selectFrameLayout.createSequentialGroup()
+                        .addComponent(Height, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
-        containerOptions.addTab("Seleccionar Frame", null, selectFrame, "");
+        containerOptions.addTab("Select Frame", null, selectFrame, "");
 
         explorerBD.setBackground(new java.awt.Color(48, 65, 82));
+
+        BDExplorer.setValue(0);
+        BDExplorer.setEnabled(false);
+        BDExplorer.setOpaque(false);
+
+        Pixel.setForeground(new java.awt.Color(255, 255, 255));
+        Pixel.setText("Pixel");
+        Pixel.setEnabled(false);
+        Pixel.setOpaque(false);
+
+        HD.setForeground(new java.awt.Color(255, 255, 255));
+        HD.setText("Image HD");
+        HD.setEnabled(false);
+        HD.setOpaque(false);
+        HD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                HDActionPerformed(evt);
+            }
+        });
+
+        ViewPhoto.setText("View Photo-Mosaic");
+        ViewPhoto.setEnabled(false);
 
         javax.swing.GroupLayout explorerBDLayout = new javax.swing.GroupLayout(explorerBD);
         explorerBD.setLayout(explorerBDLayout);
         explorerBDLayout.setHorizontalGroup(
             explorerBDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 309, Short.MAX_VALUE)
+            .addGroup(explorerBDLayout.createSequentialGroup()
+                .addGroup(explorerBDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(explorerBDLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(BDExplorer, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(explorerBDLayout.createSequentialGroup()
+                        .addGap(75, 75, 75)
+                        .addComponent(Pixel)
+                        .addGap(40, 40, 40)
+                        .addComponent(HD))
+                    .addGroup(explorerBDLayout.createSequentialGroup()
+                        .addGap(89, 89, 89)
+                        .addComponent(ViewPhoto)))
+                .addContainerGap())
         );
         explorerBDLayout.setVerticalGroup(
             explorerBDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 205, Short.MAX_VALUE)
+            .addGroup(explorerBDLayout.createSequentialGroup()
+                .addGap(64, 64, 64)
+                .addGroup(explorerBDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Pixel)
+                    .addComponent(HD))
+                .addGap(18, 18, 18)
+                .addComponent(BDExplorer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(ViewPhoto)
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
-        containerOptions.addTab("Explorar BD", null, explorerBD, "");
+        containerOptions.addTab("Explore BD", null, explorerBD, "");
 
-        canvas2.setBackground(new java.awt.Color(255, 255, 255));
-        jScrollPane1.setViewportView(canvas2);
+        ImagePrint.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jScrollPane3.setViewportView(ImagePrint);
+
+        jScrollPane1.setViewportView(jScrollPane3);
 
         jTabbedPane1.setBackground(new java.awt.Color(255, 255, 255));
 
-        canvas1.setBackground(new java.awt.Color(255, 255, 255));
-        jTabbedPane1.addTab("Imagen Seleccionada", canvas1);
+        jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
-        Close.setText("Cerrar");
-        Close.setFocusable(false);
-        Close.setOpaque(false);
-        Close.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CloseActionPerformed(evt);
-            }
-        });
+        ImageSelect.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jScrollPane2.setViewportView(ImageSelect);
 
-        SavePhotoMosaic.setText("Guardar");
+        jTabbedPane1.addTab("Image Selected", jScrollPane2);
+
+        SavePhotoMosaic.setText("Save");
+        SavePhotoMosaic.setActionCommand("Sa");
         SavePhotoMosaic.setFocusable(false);
         SavePhotoMosaic.setOpaque(false);
 
-        LoadVideo.setText("Cargar");
+        LoadVideo.setText("Load");
         LoadVideo.setFocusable(false);
         LoadVideo.setOpaque(false);
         LoadVideo.addActionListener(new java.awt.event.ActionListener() {
@@ -179,10 +268,15 @@ public class IEv4UI extends javax.swing.JFrame {
             }
         });
 
-        ShowPhotoMosaic.setText("Foto-Mosaico");
+        ShowPhotoMosaic.setText("Generate Photo-Mosaic");
         ShowPhotoMosaic.setEnabled(false);
         ShowPhotoMosaic.setFocusable(false);
         ShowPhotoMosaic.setOpaque(false);
+
+        jCheckBox1.setForeground(new java.awt.Color(255, 255, 255));
+        jCheckBox1.setText("Euclidean Distance");
+        jCheckBox1.setEnabled(false);
+        jCheckBox1.setOpaque(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -192,18 +286,18 @@ public class IEv4UI extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(containerOptions)
-                    .addComponent(jTabbedPane1))
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(31, 31, 31)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 639, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(ShowPhotoMosaic)
+                        .addGap(18, 18, 18)
+                        .addComponent(jCheckBox1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(LoadVideo)
                         .addGap(18, 18, 18)
-                        .addComponent(SavePhotoMosaic)
-                        .addGap(18, 18, 18)
-                        .addComponent(Close)))
+                        .addComponent(SavePhotoMosaic)))
                 .addGap(27, 27, 27))
         );
         jPanel1Layout.setVerticalGroup(
@@ -211,21 +305,18 @@ public class IEv4UI extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
-                        .addGap(80, 80, 80))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(ShowPhotoMosaic)
-                                .addComponent(LoadVideo)
-                                .addComponent(SavePhotoMosaic)
-                                .addComponent(Close))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(containerOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(26, 26, 26)
-                                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ShowPhotoMosaic)
+                            .addComponent(LoadVideo)
+                            .addComponent(SavePhotoMosaic)
+                            .addComponent(jCheckBox1))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(containerOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(26, 26, 26)
+                            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -242,13 +333,17 @@ public class IEv4UI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void CloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CloseActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_CloseActionPerformed
-
     private void LoadVideoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoadVideoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_LoadVideoActionPerformed
+
+    private void GridXActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GridXActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_GridXActionPerformed
+
+    private void HDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_HDActionPerformed
 
     /**
      * @param args the command line arguments
@@ -278,33 +373,40 @@ public class IEv4UI extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new IEv4UI().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new IEv4UI().setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Close;
+    private javax.swing.JSlider BDExplorer;
+    private javax.swing.JSlider ExploreVideo;
+    private javax.swing.JTextField GridX;
+    private javax.swing.JTextField GridY;
+    private javax.swing.JCheckBox HD;
+    private javax.swing.JTextField Height;
+    private javax.swing.JLabel ImagePrint;
+    private javax.swing.JLabel ImageSelect;
     private javax.swing.JButton LoadVideo;
+    private javax.swing.JCheckBox Pixel;
     private javax.swing.JButton SavePhotoMosaic;
+    private javax.swing.JButton Select;
     private javax.swing.JButton ShowPhotoMosaic;
-    private java.awt.Canvas canvas1;
-    private java.awt.Canvas canvas2;
+    private javax.swing.JButton ViewPhoto;
+    private javax.swing.JTextField Width;
     private javax.swing.JTabbedPane containerOptions;
     private javax.swing.JPanel explorerBD;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSlider jSlider1;
-    private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JSpinner jSpinner2;
-    private javax.swing.JSpinner jSpinner3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JPanel selectFrame;
     // End of variables declaration//GEN-END:variables

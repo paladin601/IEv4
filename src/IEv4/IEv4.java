@@ -16,8 +16,8 @@ public class IEv4 {
      */
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(() -> {
-                   new IEv4UI().setVisible(true);
-               });
+            new IEv4UI().setVisible(true);
+        });
     }
     
 }
