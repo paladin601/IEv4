@@ -26,14 +26,14 @@ import static org.bytedeco.javacpp.opencv_imgproc.resize;
  * @author Leonardo
  */
 public class IEv4UI extends javax.swing.JFrame {
-    public static int _gridX, _gridY, _gridWidth, _gridHeight, _numFrames, _numFramesSearch, _growthBD, _gridHalfWidth, _gridHalfHeight, _ExWidth, _ExHeigth, _numFramesSel;
+    public static int _gridWidth, _gridHeight, _gridX, _gridY, _width, _height, _numFrames, _numFramesSearch, _growthBD = 10, _gridHalfWidth, _gridHalfHeight, _ExWidth, _ExHeigth, _numFramesSel;
     public static float _minTolerance, _minLocalTolerance;
     public static double _aspectRatio;
     public static FFmpegFrameGrabber _grabber;
     public static boolean _euclidianComp, _framesHD;
     public static Mat _mosaic, _frame;
     public static Frame _frameSelect,_frameSelectSearch;
-
+    public DB db;
     /**
     
     /**
@@ -422,11 +422,11 @@ public class IEv4UI extends javax.swing.JFrame {
     }
     
     //display imagen en la zona grande
-    public static void display_frame(Frame a){
+    public static void display(Frame a){
         ImagePrint.setIcon(new ImageIcon (Java2DFrameUtils.toBufferedImage(resize(Java2DFrameUtils.toMat(a),636) )));
     }
     
-    public static void display_mat(Mat a){
+    public static void display(Mat a){
         ImagePrint.setIcon(new ImageIcon (Java2DFrameUtils.toBufferedImage(resize(a,636) )));
     }
     
@@ -434,6 +434,24 @@ public class IEv4UI extends javax.swing.JFrame {
     //imagen chiquita vista previa
     public static void display_mat_select(Mat a){
         ImageSelect.setIcon(new ImageIcon (Java2DFrameUtils.toBufferedImage(resize(a,310) )));
+    }
+    
+    public void UpdateData(){
+        try {
+        _numFrames = _grabber.getLengthInVideoFrames()-1; 
+        _width = _grabber.getImageWidth();
+        _height = _grabber.getImageHeight();
+        _aspectRatio = calculateAspectRatio(_width, _height);
+        _gridX = Integer.parseInt(GridX.getText());        
+        _gridY = Integer.parseInt(GridY.getText());
+        _gridWidth = _width / _gridX;
+        _gridHeight = _height / _gridY; 
+        _gridHalfWidth = (int) _gridWidth/2;
+        _gridHalfHeight = (int) _gridHeight/2;
+        } catch (Exception e) {
+            System.out.println(e.getMessage()+"   En update data");
+        }
+
     }
     
     private void LoadVideoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoadVideoActionPerformed
@@ -446,18 +464,19 @@ public class IEv4UI extends javax.swing.JFrame {
             _grabber = new FFmpegFrameGrabber(fSelected.getAbsolutePath());
             try {
                 _grabber.start();
-                _numFrames = _grabber.getLengthInVideoFrames()-1; 
+                UpdateData();
                 _numFramesSel =_numFrames/2;
+                
+                
                 _grabber.setVideoFrameNumber(_numFramesSel);
                 _frameSelect = _grabber.grab();
-                _gridWidth = _grabber.getImageWidth();
-                Width.setText(Integer.toString(_gridWidth));
-                _gridHeight = _grabber.getImageHeight();
-                Height.setText(Integer.toString(_gridHeight));
-                _aspectRatio = calculateAspectRatio(_gridWidth, _gridHeight);
+
+                Width.setText(Integer.toString(_width));
+                Height.setText(Integer.toString(_height));
                 ExploreVideo.setMaximum(_numFrames);
                 ExploreVideo.setValue(_numFramesSel);
-                display_frame(_frameSelect);
+
+                display(_frameSelect);
             } catch (FrameGrabber.Exception ex) {
                 Logger.getLogger(IEv4UI.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -488,7 +507,7 @@ public class IEv4UI extends javax.swing.JFrame {
             _numFramesSel=a;
             _grabber.setVideoFrameNumber(_numFramesSel);
             _frameSelect=_grabber.grab();
-            display_frame(_frameSelect);
+            display(_frameSelect);
         } catch (FrameGrabber.Exception ex) {
             Logger.getLogger(IEv4UI.class.getName()).log(Level.SEVERE, null, ex);
         } 
@@ -518,9 +537,9 @@ public class IEv4UI extends javax.swing.JFrame {
 
     private void WidthKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_WidthKeyReleased
         try{
-            _gridWidth=Integer.parseInt(Width.getText());
-            _gridHeight=calculateHeight(_gridWidth);
-            Height.setText(Integer.toString(_gridHeight));
+            _width=Integer.parseInt(Width.getText());
+            _height=calculateHeight(_width);
+            Height.setText(Integer.toString(_height));
         }catch(NumberFormatException e){
         }
     }//GEN-LAST:event_WidthKeyReleased
@@ -553,7 +572,7 @@ public class IEv4UI extends javax.swing.JFrame {
             if(!_framesHD){
                 BDExplorer.setEnabled(false);
                 ViewPhoto.setEnabled(false);
-                display_mat(_mosaic); // en mosaic se guarda la imagen modificada
+                display(_mosaic); // en mosaic se guarda la imagen modificada
             }
         }
     }//GEN-LAST:event_PixelActionPerformed
@@ -573,7 +592,7 @@ public class IEv4UI extends javax.swing.JFrame {
             if(!Pixel.isSelected()){
                 BDExplorer.setEnabled(false);
                 ViewPhoto.setEnabled(false);
-                display_mat(_mosaic); // en mosaic se guarda la imagen modificada
+                display(_mosaic); // en mosaic se guarda la imagen modificada
             }
         }
     }//GEN-LAST:event_HDActionPerformed
@@ -581,9 +600,12 @@ public class IEv4UI extends javax.swing.JFrame {
     private void ShowPhotoMosaicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ShowPhotoMosaicActionPerformed
         Pixel.setEnabled(true);
         HD.setEnabled(true);
-        // generar bd
-        // generar mosaico y guardarlo en _mosaic
-        display_mat(_mosaic);
+        
+        UpdateData();
+        
+        db = new DB(resize(Java2DFrameUtils.toMat(_frameSelect), _width));
+        _mosaic = db.GenerateMosaic();// generar mosaico y guardarlo en _mosaic
+        display(_mosaic);
         ShowPhotoMosaic.setEnabled(false);
     }//GEN-LAST:event_ShowPhotoMosaicActionPerformed
 
@@ -597,14 +619,14 @@ public class IEv4UI extends javax.swing.JFrame {
             try {
                 _grabber.setVideoFrameNumber(_numFramesSearch);
                 _frameSelectSearch=_grabber.grab();
-                display_frame(_frameSelectSearch);
+                display(_frameSelectSearch);
             } catch (FrameGrabber.Exception ex) {
                 Logger.getLogger(IEv4UI.class.getName()).log(Level.SEVERE, null, ex);
             }
         }else{
             Mat aux = null;
             //obtener imagen miniatura de la bd pixelada aux = imagen de la bd
-            display_mat(aux);
+            display(aux);
         }
     }//GEN-LAST:event_BDExplorerMouseReleased
 
@@ -612,7 +634,7 @@ public class IEv4UI extends javax.swing.JFrame {
         HD.setEnabled(false);
         Pixel.setEnabled(false);
         _framesHD=false;
-        display_mat(_mosaic);
+        display(_mosaic);
         ViewPhoto.setEnabled(false);
     }//GEN-LAST:event_ViewPhotoActionPerformed
     

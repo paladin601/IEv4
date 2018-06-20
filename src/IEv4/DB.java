@@ -18,16 +18,33 @@ import org.bytedeco.javacv.Java2DFrameUtils;
  * @author Mipto Laptop 1
  */
 public class DB {
+
+ 
     public int MinTolerance = 15, MinLocalTolerance = 20;
     Imagensish[] FramesUsed, FramesUsedHD, TiledImage;
     public HashSet<Integer> CheckedIndex;
+    public ArrayList<Integer> FramesToMatch;
     public Point2d[] TileInits;
     public Mat Img;
+    private int size;
 //    public ArrayList<Frame> FramesToCheck;    
 //    public ArrayList<Integer> FramesToCheckIndex;
-    public ArrayList<Integer> FramesToMatch;
     
 
+    
+       public DB(Mat Img) {
+        size = IEv4UI._gridX * IEv4UI._gridY;
+           
+        FramesUsed = new Imagensish[size];
+        FramesUsedHD = new Imagensish[size];
+        TiledImage = new Imagensish[size];
+        TileInits = new Point2d[size];
+        CheckedIndex = new HashSet<>();
+        FramesToMatch = new ArrayList<>();
+        
+        this.Img = Img;
+    }
+    
     public void TileImage(){
         
         for (int yy = 0, initY = 0; yy < IEv4UI._gridY; yy++, initY+= IEv4UI._gridHeight) {
@@ -68,7 +85,7 @@ public class DB {
             try {
                 IEv4UI._grabber.setFrameNumber(frame);
                 grabbedHD = Java2DFrameUtils.toMat(IEv4UI._grabber.grab());
-                Comp = new Imagensish(IEv4UI._grabber.grab(), frame);
+                Comp = new Imagensish(IEv4UI.resize(grabbedHD, IEv4UI._gridWidth), frame);
                      
             } catch (Exception e) {
             }
@@ -87,6 +104,8 @@ public class DB {
     }
 
     public Mat GenerateMosaic(){
+        TileImage();
+        MatchTiles();
         System.out.println("Generating mosaic");
         Mat aux=null,aux1=null;
         int i=0;
