@@ -48,10 +48,10 @@ public class Imagensish {
     //Done
     public final void MeasureImg(BufferedImage In){
         
-        Prom[1] = MeasureROI(In, new Rect(0, 0, IEv4UI._gridHalfHeight ,IEv4UI._gridHalfHeight));
-        Prom[2] = MeasureROI(In, new Rect(IEv4UI._gridHalfHeight, 0, IEv4UI._gridHalfHeight, IEv4UI._gridHalfHeight));
-        Prom[3] = MeasureROI(In, new Rect(0, IEv4UI._gridHalfHeight, IEv4UI._gridHalfHeight, IEv4UI._gridHalfHeight));
-        Prom[4] = MeasureROI(In, new Rect(IEv4UI._gridHalfHeight, IEv4UI._gridHalfHeight, IEv4UI._gridHalfHeight, IEv4UI._gridHalfHeight));
+        Prom[1] = MeasureROI(In, new Rect(0, 0, IEv4UI._gridHalfWidth-1 ,IEv4UI._gridHalfHeight-1));
+        Prom[2] = MeasureROI(In, new Rect(IEv4UI._gridHalfWidth, 0, IEv4UI._gridHalfWidth-1, IEv4UI._gridHalfHeight-1));
+        Prom[3] = MeasureROI(In, new Rect(0, IEv4UI._gridHalfHeight, IEv4UI._gridHalfWidth-1, IEv4UI._gridHalfHeight-1));
+        Prom[4] = MeasureROI(In, new Rect(IEv4UI._gridHalfWidth, IEv4UI._gridHalfHeight, IEv4UI._gridHalfWidth-1, IEv4UI._gridHalfHeight-1));
         
         float red = 0, green = 0, blue = 0;
         for (int ii = 1; ii < Prom.length; ii++) {
@@ -69,8 +69,11 @@ public class Imagensish {
     public Color MeasureROI(BufferedImage In, Rect ROI){
         
         float red = 0, green = 0, blue = 0;
-        for (int yy = ROI.y(); yy < ROI.height(); yy++) {
-            for (int xx = ROI.x(); xx < ROI.width(); xx++) {
+        int limy= ROI.y() + ROI.height();        
+        int limx= ROI.x() + ROI.width();
+        if(limx> In.getWidth()|| limy > In.getHeight()) System.out.println("la tas cagado serio");
+        for (int yy = ROI.y(); yy < limy; yy++) {
+            for (int xx = ROI.x(); xx < limx; xx++) {
                 Color aux = new Color(In.getRGB(xx, yy));
                 
                 red   += aux.getRed();
@@ -78,7 +81,7 @@ public class Imagensish {
                 blue  += aux.getBlue();
             }
         }
-        int size = ROI.width() * ROI.height();
+        int size = ROI.height() * ROI.width();
         red   /= size;        
         green /= size;
         blue  /= size;
@@ -90,22 +93,46 @@ public class Imagensish {
     }
     
     public static boolean AlikeImgs(Imagensish A, Imagensish B){
+        if(IEv4UI._locality < 0) return true;
         Color[] promA = A.getProm(), promB = B.getProm();
+        int local = 0;
+        double dist;
         if(IEv4UI._euclidianComp){
-            if(EUDistance(promA[0], promB[0]) > IEv4UI._minTolerance) return false;
-            for (int ii = 1; ii < promA.length; ii++){
-                if(EUDistance(promA[ii], promB[ii]) > IEv4UI._minLocalTolerance) return false;
+            dist = EUDistance(promA[0], promB[0]);
+            if( dist > IEv4UI._minTolerance){
+                System.out.println(promA[0] +"vs"+ promB[0]+" = "+dist);
+                return false;
+            }else{
+                System.out.println("good");
+                if(IEv4UI._locality == 0) return true;
+            }
+            for (int ii = 1; ii < promA.length && local < IEv4UI._locality; ii++){
+                dist = EUDistance(promA[ii], promB[ii]);
+                if(dist > IEv4UI._minLocalTolerance) {
+                }else{
+                    local++;
+                }
             }
         }
         else
         {
-            if(LABDistance(promA[0], promB[0]) > IEv4UI._minTolerance) return false;
-            for (int ii = 1; ii < promA.length; ii++){
-                if(LABDistance(promA[ii], promB[ii]) > IEv4UI._minLocalTolerance) return false;
+            dist = LABDistance(promA[0], promB[0]);
+            if( dist > IEv4UI._minTolerance){
+                System.out.println(promA[0] +"vs"+ promB[0]+" = "+dist);
+                return false;
+            }else{
+                System.out.println("good");
+                if(IEv4UI._locality == 0) return true;
+            }
+            for (int ii = 1; ii < promA.length && local < IEv4UI._locality; ii++){
+                dist = LABDistance(promA[ii], promB[ii]);
+                if(dist > IEv4UI._minLocalTolerance) {
+                }else{
+                    local++;
+                }
             }
         }
-        
-        return true;
+        return local >= IEv4UI._locality;
     }
     
     
@@ -113,7 +140,8 @@ public class Imagensish {
         double red_dist = A.getRed() - B.getRed();
         double green_dist = A.getGreen() - B.getGreen();
         double blue_dist = A.getBlue() - B.getBlue();
-        return Math.sqrt(red_dist*red_dist + green_dist*green_dist + blue_dist*blue_dist);
+        double re = Math.sqrt(red_dist*red_dist + green_dist*green_dist + blue_dist*blue_dist);
+        return re;
     }
     
     public static double LABDistance(Color A, Color B){
@@ -130,7 +158,7 @@ public class Imagensish {
     }
     
     public static Color RGBtoXYZ(){
-              return Color.black;          
+        return Color.black;          
 
     }
     

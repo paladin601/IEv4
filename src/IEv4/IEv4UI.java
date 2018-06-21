@@ -26,11 +26,11 @@ import static org.bytedeco.javacpp.opencv_imgproc.resize;
  * @author Leonardo
  */
 public class IEv4UI extends javax.swing.JFrame {
-    public static int _gridWidth, _gridHeight, _gridX, _gridY, _width, _height, _numFrames, _numFramesSearch, _growthBD = 10, _gridHalfWidth, _gridHalfHeight, _ExWidth, _ExHeigth, _numFramesSel;
-    public static float _minTolerance, _minLocalTolerance;
+    public static int _change = 500,_locality= 1, _gridWidth, _gridHeight, _gridX, _gridY, _width, _height, _numFrames, _numFramesSearch, _growthBD = 10, _gridHalfWidth, _gridHalfHeight, _ExWidth, _ExHeigth, _numFramesSel;
+    public static float _minTolerance = 30, _minLocalTolerance = 40;
     public static double _aspectRatio;
     public static FFmpegFrameGrabber _grabber;
-    public static boolean _euclidianComp, _framesHD;
+    public static boolean _euclidianComp, _framesHD, _desperate;
     public static Mat _mosaic, _frame;
     public static Frame _frameSelect,_frameSelectSearch;
     public DB db;
@@ -67,6 +67,14 @@ public class IEv4UI extends javax.swing.JFrame {
         GridY = new javax.swing.JTextField();
         Width = new javax.swing.JTextField();
         Height = new javax.swing.JTextField();
+        Change = new javax.swing.JTextField();
+        LTolerance = new javax.swing.JTextField();
+        Tolerance = new javax.swing.JTextField();
+        LabelTolerance = new javax.swing.JLabel();
+        LabelLTolerance = new javax.swing.JLabel();
+        LabelChange = new javax.swing.JLabel();
+        LabelChange1 = new javax.swing.JLabel();
+        Locality = new javax.swing.JTextField();
         explorerBD = new javax.swing.JPanel();
         BDExplorer = new javax.swing.JSlider();
         Pixel = new javax.swing.JCheckBox();
@@ -81,6 +89,7 @@ public class IEv4UI extends javax.swing.JFrame {
         LoadVideo = new javax.swing.JButton();
         ShowPhotoMosaic = new javax.swing.JButton();
         EuclideanDistance = new javax.swing.JCheckBox();
+        Msg = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -152,6 +161,65 @@ public class IEv4UI extends javax.swing.JFrame {
         Height.setText("0");
         Height.setEnabled(false);
 
+        Change.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        Change.setText("500");
+        Change.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ChangeActionPerformed(evt);
+            }
+        });
+        Change.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                ChangeKeyReleased(evt);
+            }
+        });
+
+        LTolerance.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        LTolerance.setText("40");
+        LTolerance.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                LToleranceKeyReleased(evt);
+            }
+        });
+
+        Tolerance.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        Tolerance.setText("30");
+        Tolerance.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ToleranceActionPerformed(evt);
+            }
+        });
+        Tolerance.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                ToleranceKeyReleased(evt);
+            }
+        });
+
+        LabelTolerance.setForeground(new java.awt.Color(255, 255, 255));
+        LabelTolerance.setText("Tolerance");
+
+        LabelLTolerance.setForeground(new java.awt.Color(255, 255, 255));
+        LabelLTolerance.setText("LTolerance");
+
+        LabelChange.setForeground(new java.awt.Color(255, 255, 255));
+        LabelChange.setText("Change");
+
+        LabelChange1.setForeground(new java.awt.Color(255, 255, 255));
+        LabelChange1.setText("Locality");
+
+        Locality.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        Locality.setText("2");
+        Locality.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LocalityActionPerformed(evt);
+            }
+        });
+        Locality.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                LocalityKeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout selectFrameLayout = new javax.swing.GroupLayout(selectFrame);
         selectFrame.setLayout(selectFrameLayout);
         selectFrameLayout.setHorizontalGroup(
@@ -173,53 +241,85 @@ public class IEv4UI extends javax.swing.JFrame {
                             .addComponent(ExploreVideo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jSeparator1)
                             .addGroup(selectFrameLayout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(Height, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(selectFrameLayout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(Width, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, selectFrameLayout.createSequentialGroup()
                                 .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel6)
-                                    .addComponent(jLabel5))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(GridX, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(GridY, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel8)
+                                    .addComponent(jLabel7))
+                                .addGap(18, 18, 18)
+                                .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(Height, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(Width, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(GridX, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(GridY, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(18, 18, 18)
+                                .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(selectFrameLayout.createSequentialGroup()
+                                        .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(LabelLTolerance)
+                                            .addComponent(LabelTolerance)
+                                            .addComponent(LabelChange))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(Change, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(Tolerance, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(LTolerance, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addGroup(selectFrameLayout.createSequentialGroup()
+                                        .addComponent(LabelChange1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(Locality, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 5, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         selectFrameLayout.setVerticalGroup(
             selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(selectFrameLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addComponent(GridX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addComponent(GridY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7)
-                    .addComponent(Width, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(selectFrameLayout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(ExploreVideo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Select))
+                        .addComponent(jLabel5)
+                        .addGap(14, 14, 14)
+                        .addComponent(jLabel6)
+                        .addGap(14, 14, 14)
+                        .addComponent(jLabel7)
+                        .addGap(14, 14, 14)
+                        .addComponent(jLabel8))
                     .addGroup(selectFrameLayout.createSequentialGroup()
-                        .addComponent(Height, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(selectFrameLayout.createSequentialGroup()
+                                .addComponent(GridX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(GridY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(Width, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(selectFrameLayout.createSequentialGroup()
+                                    .addComponent(LabelTolerance)
+                                    .addGap(14, 14, 14)
+                                    .addComponent(LabelLTolerance)
+                                    .addGap(14, 14, 14)
+                                    .addComponent(LabelChange))
+                                .addGroup(selectFrameLayout.createSequentialGroup()
+                                    .addComponent(Tolerance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(LTolerance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(Change, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(selectFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(Height, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(LabelChange1)))
+                    .addComponent(Locality, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ExploreVideo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Select)
                 .addContainerGap())
         );
 
@@ -352,6 +452,9 @@ public class IEv4UI extends javax.swing.JFrame {
             }
         });
 
+        Msg.setForeground(new java.awt.Color(255, 255, 255));
+        Msg.setText("Mensaje");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -365,9 +468,12 @@ public class IEv4UI extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(ContainerImage, javax.swing.GroupLayout.PREFERRED_SIZE, 639, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(ShowPhotoMosaic)
-                        .addGap(18, 18, 18)
-                        .addComponent(EuclideanDistance)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(ShowPhotoMosaic)
+                                .addGap(18, 18, 18)
+                                .addComponent(EuclideanDistance))
+                            .addComponent(Msg, javax.swing.GroupLayout.PREFERRED_SIZE, 481, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(LoadVideo)
                         .addGap(18, 18, 18)
@@ -381,16 +487,21 @@ public class IEv4UI extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(ShowPhotoMosaic)
                             .addComponent(LoadVideo)
-                            .addComponent(SavePhotoMosaic)
-                            .addComponent(EuclideanDistance))
+                            .addComponent(SavePhotoMosaic))
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addComponent(containerOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(26, 26, 26)
                             .addComponent(ContainerSelected, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(ContainerImage, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(22, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(ContainerImage, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ShowPhotoMosaic)
+                            .addComponent(EuclideanDistance))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(Msg, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -416,9 +527,9 @@ public class IEv4UI extends javax.swing.JFrame {
     }
     
     public static Mat resize (Mat a,int x){
-        int y=calculateHeight(x);
-        org.bytedeco.javacpp.opencv_imgproc.resize(a, a, new Size(x,y) );
-        return a;
+        Mat Out = new Mat(a.size());
+        org.bytedeco.javacpp.opencv_imgproc.resize(a, Out, new Size(x,calculateHeight(x)) );
+        return Out;
     }
     
     //display imagen en la zona grande
@@ -438,16 +549,22 @@ public class IEv4UI extends javax.swing.JFrame {
     
     public void UpdateData(){
         try {
-        _numFrames = _grabber.getLengthInVideoFrames()-1; 
-        _width = _grabber.getImageWidth();
-        _height = _grabber.getImageHeight();
-        _aspectRatio = calculateAspectRatio(_width, _height);
-        _gridX = Integer.parseInt(GridX.getText());        
-        _gridY = Integer.parseInt(GridY.getText());
-        _gridWidth = _width / _gridX;
-        _gridHeight = _height / _gridY; 
-        _gridHalfWidth = (int) _gridWidth/2;
-        _gridHalfHeight = (int) _gridHeight/2;
+            _locality = Integer.parseInt(Locality.getText());
+            _minLocalTolerance = Integer.parseInt(LTolerance.getText());
+            _minTolerance = Integer.parseInt(Tolerance.getText());
+            _change = Integer.parseInt(Change.getText());
+            _numFrames = _grabber.getLengthInVideoFrames()-1; 
+            _width = _grabber.getImageWidth();
+            _height = _grabber.getImageHeight();
+            _aspectRatio = calculateAspectRatio(_width, _height);
+            _gridX = Integer.parseInt(GridX.getText());        
+            _gridY = Integer.parseInt(GridY.getText());
+            _gridWidth = _width / _gridX;
+            _gridHeight = _height / _gridY; 
+            _gridHalfWidth = (int) _gridWidth/2;
+            _gridHalfHeight = (int) _gridHeight/2;
+            _ExHeigth = _gridHeight;
+            _ExWidth = _gridWidth;
         } catch (Exception e) {
             System.out.println(e.getMessage()+"   En update data");
         }
@@ -465,7 +582,7 @@ public class IEv4UI extends javax.swing.JFrame {
             try {
                 _grabber.start();
                 UpdateData();
-                _numFramesSel =_numFrames/2;
+                _numFramesSel = (int)(Math.random() * _numFrames);
                 
                 
                 _grabber.setVideoFrameNumber(_numFramesSel);
@@ -637,6 +754,34 @@ public class IEv4UI extends javax.swing.JFrame {
         display(_mosaic);
         ViewPhoto.setEnabled(false);
     }//GEN-LAST:event_ViewPhotoActionPerformed
+
+    private void ChangeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ChangeKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ChangeKeyReleased
+
+    private void LToleranceKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_LToleranceKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_LToleranceKeyReleased
+
+    private void ToleranceKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ToleranceKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ToleranceKeyReleased
+
+    private void ChangeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChangeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ChangeActionPerformed
+
+    private void LocalityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LocalityActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_LocalityActionPerformed
+
+    private void LocalityKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_LocalityKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_LocalityKeyReleased
+
+    private void ToleranceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ToleranceActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ToleranceActionPerformed
     
     /**
      * @param args the command line arguments
@@ -673,6 +818,7 @@ public class IEv4UI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JSlider BDExplorer;
+    private javax.swing.JTextField Change;
     private javax.swing.JScrollPane ContainerImage;
     private javax.swing.JTabbedPane ContainerSelected;
     private javax.swing.JCheckBox EuclideanDistance;
@@ -683,11 +829,19 @@ public class IEv4UI extends javax.swing.JFrame {
     private javax.swing.JTextField Height;
     private static javax.swing.JLabel ImagePrint;
     private static javax.swing.JLabel ImageSelect;
+    private javax.swing.JTextField LTolerance;
+    private javax.swing.JLabel LabelChange;
+    private javax.swing.JLabel LabelChange1;
+    private javax.swing.JLabel LabelLTolerance;
+    private javax.swing.JLabel LabelTolerance;
     private javax.swing.JButton LoadVideo;
+    private javax.swing.JTextField Locality;
+    public static javax.swing.JLabel Msg;
     private javax.swing.JCheckBox Pixel;
     private javax.swing.JButton SavePhotoMosaic;
     private javax.swing.JButton Select;
     private javax.swing.JButton ShowPhotoMosaic;
+    private javax.swing.JTextField Tolerance;
     private javax.swing.JButton ViewPhoto;
     private javax.swing.JTextField Width;
     private javax.swing.JTabbedPane containerOptions;
