@@ -217,6 +217,6 @@ public class Imagensish
 
     public int getMagnitude()
     {
-        return Magnitude%(int)IEv4UI._minTolerance;
+        return Magnitude/(int)IEv4UI._minTolerance;
     }
 }
