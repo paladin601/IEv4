@@ -637,6 +637,17 @@ public class IEv4UI extends javax.swing.JFrame {
             _gridX=Integer.parseInt(a);
             _gridY=_gridX;
             GridY.setText(a);
+            int size = _gridX * _gridX;
+            while(size > _numFrames){
+                _gridX--;
+                size = _gridX * _gridX;
+            };
+            _gridY = _gridX;
+            GridX.setText(String.valueOf(_gridX));
+            GridY.setText(String.valueOf(_gridY));
+
+            Change.setText(String.valueOf(_gridY * _gridX));
+
        }catch(NumberFormatException e){
        }
     }//GEN-LAST:event_GridXKeyReleased
@@ -648,6 +659,7 @@ public class IEv4UI extends javax.swing.JFrame {
              _gridY=Integer.parseInt(a);
              _gridX=_gridY;
              GridX.setText(a);
+             Change.setText(String.valueOf(_gridY * _gridX));
         }catch(NumberFormatException e){     
         }
     }//GEN-LAST:event_GridYKeyReleased
@@ -719,7 +731,6 @@ public class IEv4UI extends javax.swing.JFrame {
         HD.setEnabled(true);
         
         UpdateData();
-        
         db = new DB(resize(Java2DFrameUtils.toMat(_frameSelect), _width));
         _mosaic = db.GenerateMosaic();// generar mosaico y guardarlo en _mosaic
         display(_mosaic);

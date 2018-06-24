@@ -29,7 +29,7 @@ public class DB
     public boolean CheckingOld = false;
     private int size;
     private boolean status = false;
-
+    private int[] rand;
     public DB(Mat Img)
     {
         size = IEv4UI._gridX * IEv4UI._gridY;
@@ -39,7 +39,22 @@ public class DB
         CheckedIndex = new HashSet<>();
         OrderedTiles = new HashMap<>();
         Pending = new ArrayList<>();
-        for (int i = 0; i < 4; i++)
+        rand = new int[IEv4UI._numFrames];
+        
+        for (int ii = 0; ii < IEv4UI._numFrames; ii++)
+        {
+            rand[ii] = ii;
+        }
+        
+        for (int ii = IEv4UI._numFrames-1; ii >=0; ii--)
+        {
+            int shuffleIndex = (int)(Math.random() * (ii +1));
+            int swap = rand[ii];
+            rand[ii] = rand[shuffleIndex];
+            rand[shuffleIndex] = swap;
+        }
+        
+        for (int i = 0; i < IEv4UI._locality; i++)
         {
             Pending.add(new ArrayList<>());
         }
@@ -73,25 +88,11 @@ public class DB
         }
     }
 
-    private int stride = (int) (Math.random() * IEv4UI._numFrames) % IEv4UI._numFrames;
     private int nextFrame = 0;
 
     public int FindFrame()
     {
-        if(status && this.CheckedIndex.add(nextFrame+1))
-            return ++nextFrame;
-        
-        do
-        {
-            nextFrame = (nextFrame + stride) % IEv4UI._numFrames;
-            if (this.CheckedIndex.add(nextFrame))
-            {
-                return nextFrame;
-            } else
-            {
-                stride = (int) (Math.random() * IEv4UI._numFrames) % IEv4UI._numFrames;
-            }
-        } while (true);
+        return rand[nextFrame++];
     }
 
     public void MatchTiles()
