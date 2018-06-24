@@ -157,7 +157,11 @@ public class Imagensish {
     public static HashMap<String,Double> RGBtoLAB(Color in){
         HashMap<String,Double> re = new HashMap<>();
         HashMap<String,Double> aux=RGBtoXYZ(in);
-        double l,a,b,x,y,z;
+        double l,a,b,x,y,z,xn,yn,zn;
+        //valores constastes triestimulos 
+        xn=95.057f;
+        yn=100.0f;
+        zn=108.883f;
         
         x=aux.get("X");
         y=aux.get("Y");
@@ -165,9 +169,9 @@ public class Imagensish {
         
         // aca es x/xn y y/yn y z/zn
         
-        l=116*f(y/Math.pow(y,2)) - 16;
-        a=500*(f(x/Math.pow(x,2)) - f(y/Math.pow(y,2)));
-        b=200*(f(y/Math.pow(y,2)) - f(z/Math.pow(z,2)));
+        l=116*f(y/yn) - 16;
+        a=500*(f(x/xn) - f(y/yn));
+        b=200*(f(y/yn) - f(z/zn));
         
         re.put("L",l);
         re.put("A",a);
