@@ -219,4 +219,14 @@ public class Imagensish
     {
         return Magnitude/(int)IEv4UI._minTolerance;
     }
+    public int getSide(){
+        int sideA, sideB;
+        int actSide = getMagnitude();
+        sideA = (Magnitude - IEv4UI._deltaTolerance)%(int)IEv4UI._minTolerance;
+        sideB = (Magnitude + IEv4UI._deltaTolerance)%(int)IEv4UI._minTolerance;
+
+        if(sideA != actSide) return -1;
+        if(sideB != actSide) return 1;
+        return 0;
+    }
 }

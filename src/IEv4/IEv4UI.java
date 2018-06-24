@@ -28,6 +28,7 @@ import static org.bytedeco.javacpp.opencv_imgproc.resize;
 public class IEv4UI extends javax.swing.JFrame {
     public static int _change = 500,_locality= 1, _gridWidth, _gridHeight, _gridX, _gridY, _width, _height, _numFrames, _numFramesSearch, _growthBD = 10, _gridHalfWidth, _gridHalfHeight, _ExWidth, _ExHeigth, _numFramesSel;
     public static float _minTolerance = 30, _minLocalTolerance = 40;
+    public static int _deltaTolerance;
     public static double _aspectRatio;
     public static FFmpegFrameGrabber _grabber;
     public static boolean _euclidianComp, _framesHD, _desperate;
@@ -565,6 +566,7 @@ public class IEv4UI extends javax.swing.JFrame {
             _gridHalfHeight = (int) _gridHeight/2;
             _ExHeigth = _gridHeight;
             _ExWidth = _gridWidth;
+            _deltaTolerance = (int)_minTolerance/4;
         } catch (Exception e) {
             System.out.println(e.getMessage()+"   En update data");
         }

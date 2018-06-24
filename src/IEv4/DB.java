@@ -92,7 +92,9 @@ public class DB
 
     public int FindFrame()
     {
-        return rand[nextFrame++];
+        int frame = rand[nextFrame++];
+        CheckedIndex.add(frame);
+        return frame;
     }
 
     public void MatchTiles()
@@ -147,6 +149,9 @@ public class DB
 
                     } 
                 }//End For
+                if(!status){
+                    LookAtSides(Comp);
+                }
                 if(!status && maxLikeliness >= 0)
                 {
                     System.out.println("Para despues");
@@ -165,6 +170,48 @@ public class DB
         }
     }
 
+    public void LookAtSides(Imagensish Comp){
+        int CompMag = Comp.getSide() + Comp.getMagnitude();
+        
+        if (Comp.getSide()!= 0 && OrderedTiles.containsKey(CompMag))
+        {
+            System.out.println("Posible LADO Candidato --------------------------------------");
+            ArrayList<Imagensish> ComparisonList = OrderedTiles.get(CompMag);
+            int maxLikeliness = -1;
+            for (int jj = 0; jj < ComparisonList.size(); jj++)
+            {
+                int likelyness = AlikeImgs(ComparisonList.get(jj), Comp);
+
+                if (likelyness >= IEv4UI._locality)
+                {
+                    this.FramesUsed[ComparisonList.get(jj).getFrameNumber()] = Comp;
+                    ComparisonList.remove(jj);
+                    int imgLeft = ComparisonList.size();
+                    if (imgLeft == 0)
+                    {
+                        OrderedTiles.remove(CompMag);
+                    }
+                    System.out.println(--size+")El lado lo logró Faltan " + imgLeft + "Frames");
+                    break;
+                }
+                else
+                {
+                    System.out.println("rejected");
+                    maxLikeliness = Math.max(maxLikeliness, likelyness);
+
+                } 
+            }//End For
+            
+            if(!status && maxLikeliness >= 0)
+            {
+                System.out.println("Para despues");
+                Pending.get(maxLikeliness).add(Comp);           
+            }
+            System.out.println("Fin Posible LADO Candidato -------------------------------------");
+
+        }//End Tile Matching
+    }
+    
     public void LowerTheLevel()
     {
         System.out.println("Bajando el nivel");
@@ -288,7 +335,27 @@ public class DB
             }
         } else
         {
-
+            dist = Imagensish.LABDistance(promA[0], promB[0]);
+            if (dist > IEv4UI._minTolerance)
+            {
+                System.out.println(promA[0] + "vs" + promB[0] + " = " + dist);
+                return Integer.MIN_VALUE;
+            } else
+            {
+                if (IEv4UI._locality == 0)
+                {
+                    System.out.println("Averageing");
+                    return 0;
+                }
+            }
+            for (int ii = 1; ii < promA.length && local < IEv4UI._locality; ii++)
+            {
+                dist = Imagensish.LABDistance(promA[ii], promB[ii]);
+                if (dist <= IEv4UI._minLocalTolerance)
+                {
+                    local++;
+                }
+            }
         }
         return local;
     }
