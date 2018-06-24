@@ -7,6 +7,7 @@ package IEv4;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacpp.opencv_core.Rect;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
@@ -145,22 +146,74 @@ public class Imagensish {
     }
     
     public static double LABDistance(Color A, Color B){
-        A = Imagensish.RGBtoLAB(A);
-        B = Imagensish.RGBtoLAB(B);
-        double red_dist = A.getRed() - B.getRed();
-        double green_dist = A.getGreen() - B.getGreen();
-        double blue_dist = A.getBlue() - B.getBlue();
+        HashMap<String,Double> A1 = Imagensish.RGBtoLAB(A);
+        HashMap<String,Double> B1 = Imagensish.RGBtoLAB(B);
+        double red_dist = A1.get("L") - B1.get("L");
+        double green_dist = A1.get("A") - B1.get("A");
+        double blue_dist = A1.get("B") - B1.get("B");
         return Math.sqrt(red_dist*red_dist + green_dist*green_dist + blue_dist*blue_dist);
     }
     
-    public static Color RGBtoLAB(Color in){
-      return Color.black;          
+    public static HashMap<String,Double> RGBtoLAB(Color in){
+        HashMap<String,Double> re = new HashMap<>();
+        HashMap<String,Double> aux=RGBtoXYZ(in);
+        double l,a,b,x,y,z;
+        
+        x=aux.get("X");
+        y=aux.get("Y");
+        z=aux.get("Z");
+        
+        // aca es x/xn y y/yn y z/zn
+        
+        l=116*f(y/Math.pow(y,2)) - 16;
+        a=500*(f(x/Math.pow(x,2)) - f(y/Math.pow(y,2)));
+        b=200*(f(y/Math.pow(y,2)) - f(z/Math.pow(z,2)));
+        
+        re.put("L",l);
+        re.put("A",a);
+        re.put("B",b);
+        
+        
+        return re;          
     }
     
-    public static Color RGBtoXYZ(){
-        return Color.black;          
+    public static HashMap<String,Double> RGBtoXYZ(Color in){
+        HashMap<String,Double> re = new HashMap<>(); 
+        double r,g,b;
+        double x,y,z;
+        //normalizar
+        r=in.getRed()/255.0f;
+        g=in.getGreen()/255.0f;
+        b=in.getBlue()/255.0f;
+        
+        r = r <= 0.04045 ? r/12.92 : Math.pow((r+0.055)/1.055, 2.4);
+	g = g <= 0.04045 ? g/12.92 : Math.pow((g+0.055)/1.055, 2.4);
+	b = b <= 0.04045 ? b/12.92 : Math.pow((b+0.055)/1.055, 2.4);
+        
+        //srgb d65
+        x= r*0.4124564f + g*0.3575761f + b*0.1804375f;
+        y= r*0.2126729f + g*0.7151522f + b*0.0721750f;
+        z= r*0.0193339f + g*0.1191920f + b*0.9503041f;
+        
+        re.put("X",x);
+        re.put("Y",y);
+        re.put("Z",z);       
+        
+        return re;          
 
     }
+    
+    public static double  f(double t){
+        final double es3 = Math.pow(6/29,3)
+       ,es2 = Math.pow(6/29,2);
+        
+         if(t > es3){
+             t = Math.cbrt(t);
+         }else{
+             t = (t/(3 * es2)) + (4/29);
+         }
+         return t;
+     }
     
     //Getters----------------------------------------------------------------------------------
     public Color[] getProm() {
