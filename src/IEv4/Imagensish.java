@@ -32,7 +32,6 @@ public class Imagensish
         this.Img = Img;
         this.FrameNumber = FrameNumber;
         Prom = new Color[5];
-
         MeasureImg(Java2DFrameUtils.toBufferedImage(Img));
     }
 
@@ -75,7 +74,8 @@ public class Imagensish
         blue /= 4;
 
         Prom[0] = new Color(Clamp(red), Clamp(green), Clamp(blue));
-        Magnitude = (int) EUDistance(Color.BLACK, Prom[0]);
+        Magnitude = (IEv4UI._euclidianComp) ? (int) LABDistance(Color.BLACK, Prom[0]) : 
+                (int)EUDistance(Color.BLACK, Prom[0]);
     }
 
     //Done

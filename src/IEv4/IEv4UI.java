@@ -644,6 +644,17 @@ public class IEv4UI extends javax.swing.JFrame {
                 _gridX--;
                 size = _gridX * _gridX;
             };
+            
+            try
+           {
+              while() 
+           } catch (Exception e)
+           {
+           }
+            
+            
+            
+            
             _gridY = _gridX;
             GridX.setText(String.valueOf(_gridX));
             GridY.setText(String.valueOf(_gridY));
@@ -668,8 +679,8 @@ public class IEv4UI extends javax.swing.JFrame {
 
     private void WidthKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_WidthKeyReleased
         try{
-            _width=Integer.parseInt(Width.getText());
-            _height=calculateHeight(_width);
+            _width = Integer.parseInt(Width.getText());
+            _height = calculateHeight(_width);
             Height.setText(Integer.toString(_height));
         }catch(NumberFormatException e){
         }
@@ -677,7 +688,9 @@ public class IEv4UI extends javax.swing.JFrame {
 
     private void SelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SelectActionPerformed
         try{
-            _frame=Java2DFrameUtils.toMat(_frameSelect);
+            db = null;
+            UpdateData();
+            _frame = Java2DFrameUtils.toMat(_frameSelect);
             display_mat_select(_frame);
             ShowPhotoMosaic.setEnabled(true);
             EuclideanDistance.setEnabled(true);   
@@ -712,9 +725,9 @@ public class IEv4UI extends javax.swing.JFrame {
         if(HD.isSelected()){
             if(Pixel.isSelected()){
                 Pixel.setSelected(false);
-                _framesHD=true;
+                _framesHD = true;
             }else{
-                _framesHD=true;
+                _framesHD = true;
                 BDExplorer.setMaximum(0);//cambiar cero por tamaño de la base de datos
                 BDExplorer.setEnabled(true);
                 ViewPhoto.setEnabled(true);   
@@ -733,7 +746,7 @@ public class IEv4UI extends javax.swing.JFrame {
         HD.setEnabled(true);
         
         UpdateData();
-        db = new DB(resize(Java2DFrameUtils.toMat(_frameSelect), _width));
+        db = new DB(resize(_frame, _width));
         _mosaic = db.GenerateMosaic();// generar mosaico y guardarlo en _mosaic
         display(_mosaic);
         ShowPhotoMosaic.setEnabled(false);

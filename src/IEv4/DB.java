@@ -84,6 +84,7 @@ public class DB
                     OrderedTiles.put(Integer.valueOf(Magnitude), aux);
                 }
                 aux.add(Piece);
+                FramesUsed[index] = Piece;
             }
         }
     }
@@ -92,7 +93,9 @@ public class DB
 
     public int FindFrame()
     {
-        int frame = rand[nextFrame++];
+        nextFrame++;
+        if(nextFrame >= IEv4UI._numFrames) return Integer.MIN_VALUE;
+        int frame = rand[nextFrame];
         CheckedIndex.add(frame);
         return frame;
     }
@@ -104,7 +107,8 @@ public class DB
             int frame = FindFrame();
             Imagensish Comp = null;
             Mat grabbedHD = null, lowPoly = null;
-
+            if(frame == Integer.MIN_VALUE) return;
+            
             try
             {
                 IEv4UI._grabber.setFrameNumber(frame);
@@ -119,13 +123,15 @@ public class DB
 
             Comp = new Imagensish(lowPoly, frame);
             int CompMag = Comp.getMagnitude();
-            System.out.println("inicio de el frame " + frame);
+            //System.out.println("inicio de el frame " + frame);
+            
             if (OrderedTiles.containsKey(CompMag))
             {
                 System.out.println("Posible Candidato frame----------------------------------");
                 ArrayList<Imagensish> ComparisonList = OrderedTiles.get(CompMag);
                 status = false;
                 int maxLikeliness = -1;
+                
                 for (int ii = 0; ii < ComparisonList.size() && !status; ii++)
                 {
                     int likelyness = AlikeImgs(ComparisonList.get(ii), Comp);
@@ -158,14 +164,28 @@ public class DB
                     Pending.get(maxLikeliness).add(Comp);           
                 }
 
-                if ((this.CheckedIndex.size() + 1) % IEv4UI._change == 0)
-                {
-                    LowerTheLevel();
-                }
+
                 System.out.println("Fin Posible candidato frame -----------------------------");
             }//End Tile Matching
+            else if (IEv4UI._locality <0 ){
+                for (Map.Entry<Integer, ArrayList<Imagensish>> entry : OrderedTiles.entrySet())
+                {
+                    ArrayList<Imagensish> ComparisonList = entry.getValue();
+                    for (Imagensish imagensish : ComparisonList)
+                    {
+                        Imagensish add = //(Pending.get(0).size() >0)? Pending.get(0).remove(0) : 
+                                Comp;
+                        FramesUsed[imagensish.getFrameNumber()] = add;
+                    }
+                }
+                OrderedTiles.clear();
+            }
 
-            System.out.println("fin de el frame " + frame);
+            if ((this.CheckedIndex.size() + 1) % IEv4UI._change == 0)
+            {
+                LowerTheLevel();
+            }
+            //System.out.println("fin de el frame " + frame);
 
         }
     }
@@ -177,7 +197,7 @@ public class DB
         {
             System.out.println("Posible LADO Candidato --------------------------------------");
             ArrayList<Imagensish> ComparisonList = OrderedTiles.get(CompMag);
-            int maxLikeliness = -1;
+            
             for (int jj = 0; jj < ComparisonList.size(); jj++)
             {
                 int likelyness = AlikeImgs(ComparisonList.get(jj), Comp);
@@ -197,16 +217,8 @@ public class DB
                 else
                 {
                     System.out.println("rejected");
-                    maxLikeliness = Math.max(maxLikeliness, likelyness);
-
                 } 
             }//End For
-            
-            if(!status && maxLikeliness >= 0)
-            {
-                System.out.println("Para despues");
-                Pending.get(maxLikeliness).add(Comp);           
-            }
             System.out.println("Fin Posible LADO Candidato -------------------------------------");
 
         }//End Tile Matching
@@ -223,7 +235,7 @@ public class DB
             {
                 Imagensish Comp = viejas.get(ii);
                 int CompMag = Comp.getMagnitude();
-
+                int maxLikeliness = -1;
                 if (OrderedTiles.containsKey(CompMag))
                 {
                     System.out.println("Posible Viejo Candidato --------------------------------------");
@@ -244,8 +256,19 @@ public class DB
                             }
                             System.out.println(--size+")El viejo lo logró Faltan " + imgLeft + "Frames");
                             break;
-                        }
+                        }  
+                        else
+                        {
+                            System.out.println("rejected");
+                            maxLikeliness = Math.max(maxLikeliness, likelyness);
+
+                        } 
                     }//End For
+                    if(!status && maxLikeliness >= 0)
+                    {
+                        System.out.println("Para despues");
+                        Pending.get(maxLikeliness).add(Comp);           
+                    }
                     System.out.println("Fin Posible Viejo Candidato -------------------------------------");
 
                 }//End Tile Matching
