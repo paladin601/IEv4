@@ -644,17 +644,6 @@ public class IEv4UI extends javax.swing.JFrame {
                 _gridX--;
                 size = _gridX * _gridX;
             };
-            
-            try
-           {
-              while() 
-           } catch (Exception e)
-           {
-           }
-            
-            
-            
-            
             _gridY = _gridX;
             GridX.setText(String.valueOf(_gridX));
             GridY.setText(String.valueOf(_gridY));
